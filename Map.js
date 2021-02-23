@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE, MAP_TYPES}  from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 
 const Map = () => {
