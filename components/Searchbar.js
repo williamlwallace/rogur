@@ -1,32 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { connect } from 'react-redux';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
-const Searchbar = () => {
-  const [dropOff, setDropOff] = useState();
+const Searchbar = (props) => {
+
+  const ref = useRef();
+
+  useEffect(() => {
+    ref.current?.setAddressText(props.dest)
+  })
   return (
-    <View style={styles.search}>
-      <TextInput
-        style={styles.textInput}
+    <View style={styles.inputView}>
+      <GooglePlacesAutocomplete
+        ref={ref}
+        style={styles.input}
         placeholder="Where would you like to go?..."
-        onChangeText={text => setDropOff(text)} />
+        onPress={(data, details = null) => {
+          console.log(data, details);
+        }}
+        query={{
+          key: process.env.GOOGLE_MAPS_API_KEY,
+          language: 'en',
+          components: 'country:nz',
+        }} />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  search: {
-    flex: 1,
-    margin: 10,
-    marginBottom: 0,
-  },
-
-  textInput: {
-    padding: 10,
-    fontSize: 20,
-    borderWidth: 1,
-    borderColor: 'lightgray',
-    borderRadius: 10,
+  inputView: {
+    position: 'absolute',
+    backgroundColor: 'rgba(0,0,0,0)',
+    top: 80,
+    // bottom: 10,
+    zIndex: 1000,
+    left: 10,
+    right: 10,
   },
 })
 
-export default Searchbar
+function mapStateToProps(state) {
+  return {
+    origin: state.origin,
+    destination: state.destination
+  }
+}
+
+export default connect(mapStateToProps)(Searchbar);

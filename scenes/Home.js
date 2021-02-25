@@ -7,14 +7,12 @@ import Searchbar from '../components/Searchbar';
 import Map from '../components/Map';
 import Geocoder from 'react-native-geocoding';
 
+Geocoder.init(process.env.GOOGLE_MAPS_API_KEY);
+
 const Home = (props) => {
 
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [destination, setDestination ] = useState(null);
-
-  Geocoder.init(process.env.GOOGLE_MAPS_API_KEY);
-
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
@@ -25,8 +23,9 @@ const Home = (props) => {
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
     })();
-  }, []);
+  }, [location]);
 
+  const [destination, setDestination] = useState(null);
   useEffect(() => {
     Geocoder.from(props.destination)
       .then(response => {
@@ -36,14 +35,13 @@ const Home = (props) => {
       })
   })
 
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>rogur.</Text>
-      <Searchbar />
-      <Text style={styles.destinationText}>Destination: {destination}</Text>
-      {location ? <Map location={location} /> : null}
       <StatusBar style="auto" />
+      <Text style={styles.title}>rogur.</Text>
+      <Searchbar dest={destination} />
+      {/* <Text style={styles.destinationText}>Destination: {destination}</Text> */}
+      {location ? <Map location={location} /> : null}
     </View>
   )
 }
@@ -56,17 +54,11 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    flex: 0.5,
+    flex: 0.2,
     margin: 10,
     padding: 10,
     textAlign: 'center',
-    fontSize: 40,
-  },
-
-  button: {
-    flex: 1,
-    margin: 10,
-    padding: 10,
+    fontSize: 36,
   },
 
   destinationText: {
