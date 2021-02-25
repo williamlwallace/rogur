@@ -18,9 +18,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "This app needs to get your location...",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs to get your locations..."
+      "config": {
+        "googleMapsApiKey": "process.env.GOOGLE_MAPS_API_KEY"
       }
     },
     "android": {
