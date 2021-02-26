@@ -9,10 +9,9 @@ import Geocoder from 'react-native-geocoding';
 
 Geocoder.init(process.env.GOOGLE_MAPS_API_KEY);
 
-const Home = (props) => {
+const Home = () => {
 
   const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
@@ -20,28 +19,34 @@ const Home = (props) => {
         setErrorMsg('Permission to access location was denied');
         return;
       }
+
+      console.log('---Location request---')
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
     })();
-  }, [location]);
+  }, []);
 
   const [destination, setDestination] = useState(null);
+  const [destAddress, setDestAddress] = useState(null);
   useEffect(() => {
-    Geocoder.from(props.destination)
-      .then(response => {
-        console.log('request');
-        let address = response.results[0].formatted_address;
-        setDestination(address);
-      })
-  })
+    if (destination) {
+      Geocoder.from(destination)
+        .then(response => {
+          let address = response.results[0].formatted_address;
+          console.log('---Geocoder request---')
+          setDestAddress(address);
+        }).catch(error => {
+          console.log(error);
+        })
+    }
+  }, [destination])
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
       <Text style={styles.title}>rogur.</Text>
-      <Searchbar dest={destination} />
-      {/* <Text style={styles.destinationText}>Destination: {destination}</Text> */}
-      {location ? <Map location={location} /> : null}
+      <Searchbar destAddress={destAddress} setDestination={setDestination} />
+      {location ? <Map location={location} destination={destination} setDestination={setDestination} /> : null}
     </View>
   )
 }
