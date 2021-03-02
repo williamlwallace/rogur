@@ -17,7 +17,6 @@ const Searchbar = (props) => {
     <View style={styles.inputView}>
       <GooglePlacesAutocomplete
         ref={ref}
-        style={styles.input}
         placeholder="Where would you like to go?..."
         fetchDetails={true}
         onPress={(data, details = null) => {
@@ -40,8 +39,8 @@ const styles = StyleSheet.create({
   inputView: {
     position: 'absolute',
     backgroundColor: 'rgba(0,0,0,0)',
-    top: 80,
     zIndex: 1000,
+    top: 110,
     left: 10,
     right: 10,
   },

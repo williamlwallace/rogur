@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Keyboard, TouchableWithoutFeedback} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as Location from 'expo-location';
 import Searchbar from '../components/Searchbar';
@@ -42,12 +42,17 @@ const Home = () => {
   }, [destination])
 
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View style={styles.container}>
       <StatusBar style="auto" />
       <Text style={styles.title}>rogur.</Text>
-      <Searchbar destAddress={destAddress} setDestination={setDestination} />
+      {/* <Text style={styles.label}>From:</Text> */}
+      {/* <Text style={styles.label}>To:</Text> */}
+      <Searchbar style={styles.search} destAddress={destAddress} setDestination={setDestination} />
+      
       {location ? <Map location={location} destination={destination} setDestination={setDestination} /> : null}
     </View>
+    </TouchableWithoutFeedback>
   )
 }
 
@@ -59,18 +64,20 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    flex: 0.2,
+    flex: 0.1,
     margin: 10,
     padding: 10,
     textAlign: 'center',
     fontSize: 36,
   },
 
-  destinationText: {
-    flex: 0.5,
-    margin: 10,
-    margin: 10,
-  }
+  // label: {
+  //   flex: 1,
+  //   margin: 10,
+  //   padding: 10,
+  //   color: 'grey'
+  // },
+
 });
 
 function mapStateToProps(state) {
