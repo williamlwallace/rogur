@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
 import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
+import { connect } from 'react-redux';
 import { render } from 'react-dom';
 import { useForm } from 'react-hook-form';
 
-const Profile = () => {
+const Signup = props => {
 
   const { register, handleSubmit, setValue } = useForm();
   const onSubmit = data => console.log(data);
@@ -29,7 +29,7 @@ const Profile = () => {
 
       <Text style={styles.label}>Phone</Text>
       <TextInput style={styles.input} onChangeText={text => {
-        setValue('lastName', text)
+        setValue('phone', text)
       }}/>
 
       <View style={styles.button}>
@@ -43,11 +43,11 @@ const Profile = () => {
   )
 }
 
-// function mapStateToProps(state) {
-//     return {
+function mapStateToProps(state) {
+    return {
 
-//     }
-// }
+    }
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -73,9 +73,8 @@ const styles = StyleSheet.create({
   button: {
     padding: 10,
     margin: 10,
-    // backgroundColor: 'pink',
   },
 
 })
 
-export default Profile
+export default connect(mapStateToProps)(Signup)

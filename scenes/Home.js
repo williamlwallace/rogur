@@ -3,13 +3,14 @@ import { connect } from 'react-redux';
 import { StyleSheet, Text, View, TextInput, Button, Keyboard, TouchableWithoutFeedback} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as Location from 'expo-location';
+import Geocoder from 'react-native-geocoding';
 import Searchbar from '../components/Searchbar';
 import Map from '../components/Map';
-import Geocoder from 'react-native-geocoding';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
 Geocoder.init(process.env.GOOGLE_MAPS_API_KEY);
 
-const Home = () => {
+const Home = props => {
 
   const [location, setLocation] = useState(null);
   useEffect(() => {
@@ -43,15 +44,18 @@ const Home = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <Text style={styles.title}>rogur.</Text>
-      {/* <Text style={styles.label}>From:</Text> */}
-      {/* <Text style={styles.label}>To:</Text> */}
-      <Searchbar style={styles.search} destAddress={destAddress} setDestination={setDestination} />
-      
-      {location ? <Map location={location} destination={destination} setDestination={setDestination} /> : null}
-    </View>
+      <View style={styles.container}>
+        <StatusBar style="auto" />
+        { location ? 
+          <>
+            <Text style={styles.title}>rogur.</Text>
+            <Searchbar style={styles.search} destAddress={destAddress} setDestination={setDestination} />  
+            <Map location={location} destination={destination} setDestination={setDestination} />
+          </> :
+          <FontAwesomeIcon style={styles.loading} icon="spinner" size={32} />
+        } 
+
+      </View>
     </TouchableWithoutFeedback>
   )
 }
@@ -64,26 +68,23 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    flex: 0.1,
+    flex: 0.07,
     margin: 10,
     padding: 10,
     textAlign: 'center',
     fontSize: 36,
   },
 
-  // label: {
-  //   flex: 1,
-  //   margin: 10,
-  //   padding: 10,
-  //   color: 'grey'
-  // },
-
+  loading: {
+    alignSelf: 'center',
+  }
 });
 
 function mapStateToProps(state) {
   return {
     origin: state.origin,
-    destination: state.destination
+    destination: state.destination,
+    user: state.user,
   }
 }
 

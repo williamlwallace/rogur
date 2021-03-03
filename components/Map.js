@@ -26,9 +26,14 @@ const Map = (props) => {
     )
   }
 
+  const handleMapPress = (event) => {
+    setDestination(event.nativeEvent.coordinate);
+    animateMap(event.nativeEvent.coordinate);
+  }
+
   return (
     <MapView
-      provider="google"
+      provider='google'
       ref={mapView}
       style={styles.map}
       initialRegion={{
@@ -38,10 +43,7 @@ const Map = (props) => {
         longitudeDelta: 0.0100,
       }}
       showsUserLocation={true}
-      onPress={e => {
-        setDestination(e.nativeEvent.coordinate);
-        animateMap(e.nativeEvent.coordinate);
-      }}>
+      onPress={e => handleMapPress(e)}>
       {destination ? <>
         <Marker coordinate={destination} />
         <MapViewDirections
@@ -49,7 +51,7 @@ const Map = (props) => {
           destination={destination}
           apikey={process.env.GOOGLE_MAPS_API_KEY}
           strokeWidth={5}
-          strokeColor="#34d8eb"
+          strokeColor='#34d8eb'
           onError={(errorMessage) => console.log(errorMessage)} />
       </> : null
       }

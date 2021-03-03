@@ -13,6 +13,7 @@ const Searchbar = (props) => {
   useEffect(() => {
     destAddress ? ref.current?.setAddressText(destAddress) : null
   }, [destAddress])
+  
   return (
     <View style={styles.inputView}>
       <GooglePlacesAutocomplete
