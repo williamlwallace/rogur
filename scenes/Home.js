@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, Text, View, TextInput, Button, Keyboard, TouchableWithoutFeedback} from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as Location from 'expo-location';
 import Geocoder from 'react-native-geocoding';
 import Searchbar from '../components/Searchbar';
 import Map from '../components/Map';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-
-Geocoder.init(process.env.GOOGLE_MAPS_API_KEY);
 
 const Home = props => {
 
@@ -29,6 +27,8 @@ const Home = props => {
 
   const [destination, setDestination] = useState(null);
   const [destAddress, setDestAddress] = useState(null);
+  Geocoder.init(process.env.GOOGLE_MAPS_API_KEY);
+
   useEffect(() => {
     if (destination) {
       Geocoder.from(destination)
@@ -46,14 +46,14 @@ const Home = props => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <StatusBar style="auto" />
-        { location ? 
+        {location ?
           <>
             <Text style={styles.title}>rogur.</Text>
-            <Searchbar style={styles.search} destAddress={destAddress} setDestination={setDestination} />  
+            <Searchbar style={styles.search} destAddress={destAddress} setDestination={setDestination} />
             <Map location={location} destination={destination} setDestination={setDestination} />
           </> :
           <FontAwesomeIcon style={styles.loading} icon="spinner" size={32} />
-        } 
+        }
 
       </View>
     </TouchableWithoutFeedback>

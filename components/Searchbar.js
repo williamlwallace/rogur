@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { actionCreators as actions } from '../redux/actions';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
@@ -49,14 +48,11 @@ const styles = StyleSheet.create({
 
 // function mapStateToProps(state) {
 //   return {
-//     origin: state.origin,
-//     destination: state.destination
 //   }
 // }
 
 // function mapDispatchToProps(dispatch) {
 //   return {
-//     setDestination: bindActionCreators(actions.setDestination, dispatch)
 //   }
 // }
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { actionCreators as actions } from '../redux/actions';
 import { StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
@@ -11,12 +10,13 @@ const Map = (props) => {
   const { location, destination, setDestination } = props;
   const latitude = location.coords.latitude;
   const longitude = location.coords.longitude;
-  
+
   const mapView = React.createRef();
   const animateMap = (destination) => {
     mapView.current.fitToCoordinates(
-      [ location.coords, destination ], 
-      { edgePadding: {
+      [location.coords, destination],
+      {
+        edgePadding: {
           top: 50,
           right: 50,
           bottom: 50,
@@ -67,14 +67,11 @@ const styles = StyleSheet.create({
 
 // function mapStateToProps(state) {
 //   return {
-//     origin: state.origin,
-//     destination: state.destination
 //   }
 // }
 
 // function mapDispatchToProps(dispatch) {
 //   return {
-//     setDestination: bindActionCreators(actions.setDestination, dispatch)
 //   }
 // }
 

@@ -1,4 +1,3 @@
-const SET_DESTINATION = "SET_DESTINATION";
-const SET_ORIGIN = "SET_ORIGIN";
+export const CREATE_USER = "CREATE_USER";
+export const GET_USER = "GET_USER";
 
-export { SET_DESTINATION, SET_ORIGIN };

@@ -1,53 +1,59 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
-import { render } from 'react-dom';
 import { useForm } from 'react-hook-form';
+import InputScrollView from 'react-native-input-scroll-view';
+import { bindActionCreators } from 'redux';
+import * as UserActions from '../redux/actions/user'
 
-const Profile = () => {
+const Profile = props => {
 
-  const { register, handleSubmit, setValue } = useForm();
-  const onSubmit = data => console.log(data);
+  const [editable, setEditable] = useState(true);
+  const [buttonText, setButtonText] = useState('Save');
+
+  const { user } = props;
+  const { register, handleSubmit, setValue, errors } = useForm();
+  const onSubmit = data => {
+    const { actions } = props;
+    actions.createUser(data);
+    setEditable(false);
+    setButtonText('Edit')
+  }
 
   useEffect(() => {
-    register('firstName');
-    register('lastName');
-    register('phone');
+    register('firstName', { required: true, maxLength: 80 });
+    register('lastName', { required: true, maxLength: 80 });
+    register('phone', { required: true, maxLength: 11 });
   }, [register]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>First name</Text>
-      <TextInput style={styles.input} onChangeText={text => {
-        setValue('firstName', text)
-      }}/>
+      <InputScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+        <Text style={styles.label}>First name</Text>
+        <TextInput style={styles.input} editable={editable} onChangeText={text => {
+          setValue('firstName', text)
+        }} />
+        {errors.firstName?.type === "required" && <Text>Your input is required</Text>}
+        <Text style={styles.label}>Last name</Text>
+        <TextInput style={styles.input} editable={editable} onChangeText={text => {
+          setValue('lastName', text)
+        }} />
 
-      <Text style={styles.label}>Last name</Text>
-      <TextInput style={styles.input} onChangeText={text => {
-        setValue('lastName', text)
-      }}/>
-
-      <Text style={styles.label}>Phone</Text>
-      <TextInput style={styles.input} onChangeText={text => {
-        setValue('lastName', text)
-      }}/>
-
-      <View style={styles.button}>
-        <Button
-          title="S U B M I T"
-          style={styles.buttonText}
-          onPress={handleSubmit(onSubmit)}
-        />
-      </View>
+        <Text style={styles.label}>Phone</Text>
+        <TextInput style={styles.input} editable={editable} keyboardType="phone-pad" onChangeText={text => {
+          setValue('phone', text)
+        }} />
+        <View style={styles.button}>
+          <Button
+            title={buttonText}
+            style={styles.buttonText}
+            onPress={handleSubmit(onSubmit)}
+          />
+        </View>
+      </InputScrollView>
     </View>
   )
 }
-
-// function mapStateToProps(state) {
-//     return {
-
-//     }
-// }
 
 const styles = StyleSheet.create({
   container: {
@@ -73,9 +79,20 @@ const styles = StyleSheet.create({
   button: {
     padding: 10,
     margin: 10,
-    // backgroundColor: 'pink',
   },
 
 })
 
-export default Profile
+function mapStateToProps(state) {
+  return {
+    user: state.user,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators({ ...UserActions }, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile)

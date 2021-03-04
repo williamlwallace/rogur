@@ -1,9 +1,8 @@
 import React from 'react';
-import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { TabView, SceneMap } from 'react-native-tab-view';
-import reducer from './redux/reducers';
+import store from './redux/store'
 import Home from './scenes/Home';
 import Profile from './scenes/Profile';
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -11,7 +10,6 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faSpinner);
 
-const store = createStore(reducer);
 
 const HomeRoute = () => <Home />;
 const ProfileRoute = () => <Profile />;
