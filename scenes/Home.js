@@ -10,7 +10,7 @@ import Map from '../components/Map';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import * as RideActions from '../redux/actions/ride'
 
-const Home = props => {
+const Home = ({ navigation }, props) => {
 
   const [location, setLocation] = useState(null);
   useEffect(() => {
@@ -62,16 +62,15 @@ const Home = props => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <StatusBar style="auto" />
+        <StatusBar style='light' />
         {location ?
           <>
-            <Text style={styles.title}>rogur.</Text>
             <Searchbar style={styles.search} destAddress={destAddress} setDestination={setDestination} />
             <Map location={location} destination={destination} setDestination={setDestination} setRideMetrics={setRideMetrics} />
             {rideMetrics ? 
               <View style={styles.rideView}>
-                <Text>Distance: {rideMetrics.distance.toFixed(2)} km, Duration: {Math.round(rideMetrics.duration)} mins</Text>
-                <Button title="Request ride" onPress={() => handleRequestRide()} />
+                <Text style={styles.rideViewText}>Distance: {rideMetrics.distance.toFixed(2)} km   Duration: {Math.round(rideMetrics.duration)} mins</Text>
+                <Button title="Request ride" color='#408059' onPress={() => handleRequestRide()} />
               </View> : null}
           </> :
           <FontAwesomeIcon style={styles.loading} icon="spinner" size={32} />
@@ -89,25 +88,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  title: {
-    flex: 0.07,
-    margin: 10,
-    padding: 10,
-    textAlign: 'center',
-    fontSize: 36,
-  },
-
   loading: {
     alignSelf: 'center',
   },
 
   rideView: {
+    flex: 0.1,
     padding: 10,
-    margin: 10,
-    position: 'absolute',
-    bottom: 15,
-    backgroundColor: 'white'
-  }
+    justifyContent: 'center',
+    backgroundColor: '#72e8a1'
+  },
+
+  rideViewText: {
+    fontSize: 15,
+    color: 'white',
+    textAlign: 'center',
+  },
 });
 
 function mapStateToProps(state) {

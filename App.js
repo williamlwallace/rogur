@@ -1,45 +1,65 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { View, StyleSheet, Dimensions } from 'react-native';
-import { TabView, SceneMap } from 'react-native-tab-view';
+import { Dimensions, Button } from 'react-native';
 import store from './redux/store'
 import Home from './scenes/Home';
 import Profile from './scenes/Profile';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faSpinner, faUserCircle } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 
-library.add(faSpinner);
+library.add(
+  faSpinner,
+  faUserCircle);
 
-
-const HomeRoute = () => <Home />;
-const ProfileRoute = () => <Profile />;
-
-const initialLayout = { width: Dimensions.get('window').width };
+const Stack = createStackNavigator();
 
 export default function App() {
 
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    { key: 'home', title: 'Home' },
-    { key: 'profile', title: 'Profile' },
-  ]);
-
-  const renderScene = SceneMap({
-    home: HomeRoute,
-    profile: ProfileRoute,
-  });
-
   return (
     <Provider store={store}>
-      <TabView
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        initialLayout={initialLayout}
-        tabBarPosition='bottom'
-      />
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={({ navigation }) => ({
+              title: "rogur.",
+              headerStyle: {
+                backgroundColor: '#72e8a1',
+              },
+              headerTintColor: 'white',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+                fontSize: 25,
+                textShadowColor: 'black',
+                textShadowOffset: { width: 0, height: 1 },
+                textShadowRadius: 1
+              },
+              headerRight: () => (
+                <TouchableHighlight
+                  onPress={() => navigation.navigate('Profile')}    //TODO: replace this ugly thing
+                  style={{ padding: 10 }}
+                ><FontAwesomeIcon
+                    icon='user-circle'
+                    color='white'
+                    size={24} />
+                </TouchableHighlight>
+              ),
+            })} />
+          <Stack.Screen
+            name="Profile"
+            component={Profile}
+            options={{
+              headerBackTitle: 'Back'
+            }} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </Provider>
-    
+
   );
 }
 

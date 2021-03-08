@@ -6,7 +6,7 @@ import InputScrollView from 'react-native-input-scroll-view';
 import { bindActionCreators } from 'redux';
 import * as UserActions from '../redux/actions/user'
 
-const Profile = props => {
+const Profile = ({ navigation }, props) => {
 
   const [editable, setEditable] = useState(true);
   const [buttonText, setButtonText] = useState('Save');
