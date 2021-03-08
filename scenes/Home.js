@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { StyleSheet, Text, View, TextInput, Button, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as Location from 'expo-location';
@@ -7,6 +8,7 @@ import Geocoder from 'react-native-geocoding';
 import Searchbar from '../components/Searchbar';
 import Map from '../components/Map';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import * as RideActions from '../redux/actions/ride'
 
 const Home = props => {
 
@@ -34,13 +36,28 @@ const Home = props => {
       Geocoder.from(destination)
         .then(response => {
           let address = response.results[0].formatted_address;
-          console.log('---Geocoder request---')
+          console.log('---Geocoder request---');
           setDestAddress(address);
         }).catch(error => {
           console.log(error);
         })
     }
   }, [destination])
+
+  const [rideMetrics, setRideMetrics] = useState(null);
+
+  handleRequestRide = () => {
+    const { actions, user } = props;
+    const values = {
+      origin: {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude
+      },
+      destination: destination,
+      user: user
+    }
+      actions.createRide(values);
+  }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -50,7 +67,12 @@ const Home = props => {
           <>
             <Text style={styles.title}>rogur.</Text>
             <Searchbar style={styles.search} destAddress={destAddress} setDestination={setDestination} />
-            <Map location={location} destination={destination} setDestination={setDestination} />
+            <Map location={location} destination={destination} setDestination={setDestination} setRideMetrics={setRideMetrics} />
+            {rideMetrics ? 
+              <View style={styles.rideView}>
+                <Text>Distance: {rideMetrics.distance.toFixed(2)} km, Duration: {Math.round(rideMetrics.duration)} mins</Text>
+                <Button title="Request ride" onPress={() => handleRequestRide()} />
+              </View> : null}
           </> :
           <FontAwesomeIcon style={styles.loading} icon="spinner" size={32} />
         }
@@ -77,6 +99,14 @@ const styles = StyleSheet.create({
 
   loading: {
     alignSelf: 'center',
+  },
+
+  rideView: {
+    padding: 10,
+    margin: 10,
+    position: 'absolute',
+    bottom: 15,
+    backgroundColor: 'white'
   }
 });
 
@@ -88,4 +118,10 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(Home);
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators({ ...RideActions }, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

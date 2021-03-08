@@ -5,9 +5,9 @@ import { StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 
-const Map = (props) => {
+const Map = props => {
 
-  const { location, destination, setDestination } = props;
+  const { location, destination, setDestination, setRideMetrics } = props;
   const latitude = location.coords.latitude;
   const longitude = location.coords.longitude;
 
@@ -52,7 +52,8 @@ const Map = (props) => {
           apikey={process.env.GOOGLE_MAPS_API_KEY}
           strokeWidth={5}
           strokeColor='#34d8eb'
-          onError={(errorMessage) => console.log(errorMessage)} />
+          onReady={(distance, duration) => setRideMetrics(distance, duration)}
+          onError={error => console.log(error)} />
       </> : null
       }
     </MapView>
