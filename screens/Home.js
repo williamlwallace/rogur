@@ -70,7 +70,7 @@ const Home = ({ navigation }, props) => {
             {rideMetrics ? 
               <View style={styles.rideView}>
                 <Text style={styles.rideViewText}>Distance: {rideMetrics.distance.toFixed(2)} km   Duration: {Math.round(rideMetrics.duration)} mins</Text>
-                <Button title="Request ride" color='#408059' onPress={() => handleRequestRide()} />
+                <Button title="Request ride" color='#3da69b' onPress={() => handleRequestRide()} />
               </View> : null}
           </> :
           <FontAwesomeIcon style={styles.loading} icon="spinner" size={32} />
