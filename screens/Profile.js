@@ -23,7 +23,7 @@ const Profile = (props) => {
     const { actions } = props;
     data.email = user.user.email; // TODO: change this to be /user/:id
     actions.updateUser(data)
-      .then(response => {
+      .then(response => {         // TODO: implement toasts
         handleEdit()
       })
       .catch(error => console.log(error))
