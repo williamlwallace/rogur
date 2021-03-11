@@ -1,30 +1,40 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { useForm } from 'react-hook-form';
-import { StyleSheet, Text, View, TextInput, Button, Keyboard, Image } from 'react-native';
-import InputScrollView from 'react-native-input-scroll-view';
-import * as UserActions from '../redux/actions/user';
+import React, { useState, useEffect, useRef } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { useForm } from "react-hook-form";
+import { useNavigation } from '@react-navigation/native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  Keyboard,
+  Image,
+} from "react-native";
+import InputScrollView from "react-native-input-scroll-view";
+import * as UserActions from "../redux/actions/user";
 
-const SignUp = ( props) => {
-
+const SignIn = (props) => {
+  const navigation = useNavigation();
   const refInput = useRef();
 
   const { register, handleSubmit, setValue, errors } = useForm();
   useEffect(() => {
-    register('email', { required: true, maxLength: 80 });
-    register('password', { required: true, maxLength: 80 });
+    register("email", { required: true, maxLength: 80 });
+    register("password", { required: true, maxLength: 80 });
   }, [register]);
 
-  handleSignIn = data => {
-    console.log(data);
+  handleSignIn = (data) => {
     const { actions } = props;
-    actions.loginUser(data)
-  }
+    actions.loginUser(data);
+  };
 
   return (
     <View style={styles.view}>
-      <InputScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+      <InputScrollView
+        contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
+      >
         <Image style={styles.image} source={require("../assets/car.png")} />
         <Text style={styles.label}>Email</Text>
         <TextInput
@@ -35,39 +45,53 @@ const SignUp = ( props) => {
           returnKeyType="next"
           onSubmitEditing={() => refInput.current.focus()}
           blurOnSubmit={false}
-          onChangeText={text => {
-            setValue('email', text)
-          }} />
+          onChangeText={(text) => {
+            setValue("email", text);
+          }}
+        />
         <Text style={styles.label}>Password</Text>
         <TextInput
           style={styles.textInput}
           placeholder="Password"
-          returnKeyType="done" secureTextEntry
+          returnKeyType="done"
+          secureTextEntry
           onSubmitEditing={handleSubmit(handleSignIn)}
           ref={refInput}
-          onChangeText={text => {
-            setValue('password', text)
-          }} />
-        <Button title="Sign in" color="#3da69b" onPress={handleSubmit(handleSignIn)} />
+          onChangeText={(text) => {
+            setValue("password", text);
+          }}
+        />
+        <View style={styles.button}>
+          <Button
+            title="Sign in"
+            color="#3da69b"
+            onPress={handleSubmit(handleSignIn)}
+          />
+        </View>
         <View style={styles.row}>
           <Text style={styles.text}>Don't have an account? </Text>
-          <Text style={styles.textLink} onPress={() => navigation.navigate('SignUp')}>Sign up here. </Text>
+          <Text
+            style={styles.textLink}
+            onPress={() => navigation.navigate("SignUp")}
+          >
+            Sign up here.{" "}
+          </Text>
         </View>
       </InputScrollView>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   view: {
     flex: 1,
     margin: 10,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
 
   image: {
-    position: 'absolute',
-    alignSelf: 'center',
+    position: "absolute",
+    alignSelf: "center",
     top: -16,
     right: 40,
   },
@@ -75,7 +99,7 @@ const styles = StyleSheet.create({
   label: {
     marginLeft: 10,
     marginTop: 10,
-    color: 'gray'
+    color: "gray",
   },
 
   textInput: {
@@ -83,35 +107,39 @@ const styles = StyleSheet.create({
     margin: 10,
     fontSize: 18,
     borderRadius: 5,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
 
   row: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
     margin: 10,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
 
   text: {
-    color: 'gray'
+    color: "gray",
   },
 
   textLink: {
-    color: '#3da69b',
+    color: "#3da69b",
   },
-})
+
+  button: {
+    margin: 10,
+  },
+});
 
 function mapStateToProps(state) {
   return {
     user: state.user,
-  }
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({ ...UserActions }, dispatch)
-  }
+    actions: bindActionCreators({ ...UserActions }, dispatch),
+  };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

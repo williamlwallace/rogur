@@ -51,7 +51,7 @@ const Map = props => {
           destination={destination}
           apikey={process.env.GOOGLE_MAPS_API_KEY}
           strokeWidth={5}
-          strokeColor='#72e8a1'
+          strokeColor='#3da69b'
           onReady={(distance, duration) => setRideMetrics(distance, duration)}
           onError={error => console.log(error)} />
       </> : null

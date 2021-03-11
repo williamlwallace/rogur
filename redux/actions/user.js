@@ -1,4 +1,4 @@
-import { CREATE_USER, LOGIN_USER } from '../types';
+import { CREATE_USER, LOGIN_USER, LOGOUT_USER, UPDATE_USER } from '../types';
 import * as api from '../../api/api';
 
 export function createUser(data) {
@@ -33,6 +33,35 @@ export function loginUser(data) {
 function loginUserSuccess(data) {
   return {
     type: LOGIN_USER,
+    payload: data || {}
+  }
+}
+
+export function logoutUser() {
+  return function(dispatch) {
+    dispatch(logoutUserSuccess())
+  }
+}
+
+function logoutUserSuccess() {
+  return {
+    type: LOGOUT_USER,
+    payload: {}
+  }
+}
+
+export function updateUser(data) {
+  return function(dispatch) {
+    return api
+      .updateUser(data)
+        .then(response => dispatch(updateUserSuccess(response)))
+        .catch(error => console.log(error));
+  }
+}
+
+function updateUserSuccess(data) {
+  return {
+    type: UPDATE_USER,
     payload: data || {}
   }
 }
