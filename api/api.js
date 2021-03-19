@@ -23,8 +23,5 @@ export function updateUser(data) {
 
 // RIDES
 export function createRide(data) {
-  return axios.post("http://" + process.env.LOCAL_IP + ":3000/ride", data);
+  return axios.post("http://" + process.env.LOCAL_IP + ":3000/ride/create", data);
 }
-
-
-//S+T: 192.168.1.117

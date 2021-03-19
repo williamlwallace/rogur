@@ -9,6 +9,7 @@ import {
   Button,
   Keyboard,
   TouchableWithoutFeedback,
+  ActivityIndicator
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import * as Location from "expo-location";
@@ -62,7 +63,7 @@ const Home = (props) => {
         longitude: location.coords.longitude,
       },
       destination: destination,
-      user: user,
+      userId: user.user._id,
     };
     actions.createRide(values);
   };
@@ -74,7 +75,6 @@ const Home = (props) => {
         {location ? (
           <>
             <Searchbar
-              style={styles.search}
               destAddress={destAddress}
               setDestination={setDestination}
             />
@@ -102,7 +102,7 @@ const Home = (props) => {
             ) : null}
           </>
         ) : (
-          <FontAwesomeIcon style={styles.loading} icon="spinner" size={32} />
+          <ActivityIndicator />
         )}
       </View>
     </TouchableWithoutFeedback>
@@ -121,20 +121,24 @@ const styles = StyleSheet.create({
   },
 
   rideView: {
-    flex: 0.1,
+    flex: 0.15,
     padding: 10,
-    justifyContent: "center",
     backgroundColor: "#44c4a1",
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 2,  
+    elevation: 5
   },
 
   rideViewText: {
-    fontSize: 15,
+    fontSize: 17,
     color: "white",
     textAlign: "center",
   },
 
   button: {
-    margin: 10,
+    margin: 5,
   },
 });
 
