@@ -1,12 +1,15 @@
-import { CREATE_USER, LOGIN_USER, LOGOUT_USER, UPDATE_USER } from '../types';
+import { CREATE_USER, GET_USER, LOGIN_USER, LOGOUT_USER, UPDATE_USER } from '../types';
+import ajaxCallError from './ajaxCallError';
 import * as api from '../../api/api';
 
 export function createUser(data) {
   return function(dispatch) {
     return api
       .createUser(data)
-        .then(response => dispatch(createUserSuccess(response)))
-        .catch(error => console.log(error));
+      .then(
+        response => dispatch(createUserSuccess(response)),
+        error => dispatch(ajaxCallError(error))
+      );
   }
 }
 
@@ -21,12 +24,10 @@ export function loginUser(data) {
   return function(dispatch) {
     return api
       .loginUser(data)
-        .then(response => {
-          api.getUser(response.data.token)
-            .then(response => dispatch(loginUserSuccess(response)))
-            .catch(error => console.log(error));
-        })
-        .catch(error => console.log(error));
+      .then(
+        response => dispatch(loginUserSuccess(response)),
+        error => dispatch(ajaxCallError(error))
+      );
   }
 }
 
@@ -50,12 +51,32 @@ function logoutUserSuccess() {
   }
 }
 
+export function getUser(data) {
+  return function(dispatch) {
+    return api
+      .getUser(data)
+      .then(
+        response => dispatch(getUserSuccess(response)),
+        error => dispatch(ajaxCallError(error))
+      );
+  }
+}
+
+function getUserSuccess(data) {
+  return {
+    type: GET_USER,
+    payload: data || {}
+  }
+}
+
 export function updateUser(data) {
   return function(dispatch) {
     return api
       .updateUser(data)
-        .then(response => dispatch(updateUserSuccess(response)))
-        .catch(error => console.log(error));
+      .then(
+        response => dispatch(updateUserSuccess(response)),
+        error => dispatch(ajaxCallError(error))
+      );
   }
 }
 

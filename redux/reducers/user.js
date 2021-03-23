@@ -1,4 +1,4 @@
-import { CREATE_USER, LOGIN_USER, LOGOUT_USER } from '../types';
+import { CREATE_USER, GET_USER, LOGIN_USER, LOGOUT_USER } from '../types';
 
 const initialState = {
   isLoggedIn: false,
@@ -13,6 +13,8 @@ function reducer(state = initialState, { type, payload = null }) {
       return loginUser(state, payload);
     case LOGOUT_USER:
       return logoutUser(state, payload);
+    case GET_USER:
+      return getUser(state, payload);
     default:
       return state;
   }
@@ -29,7 +31,6 @@ function loginUser(state, payload) {
   return {
     ...state,
     isLoggedIn: true,
-    user: payload.data
   }
 }
 
@@ -37,6 +38,13 @@ function logoutUser(state, payload) {
   return {
     ...state,
     isLoggedIn: false,
+  }
+}
+
+function getUser(state, payload) {
+  return {
+    ...state,
+    user: payload.data
   }
 }
 

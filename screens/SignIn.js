@@ -9,15 +9,17 @@ import {
   View,
   TextInput,
   Button,
-  Keyboard,
   Image,
 } from "react-native";
 import InputScrollView from "react-native-input-scroll-view";
 import * as UserActions from "../redux/actions/user";
+import { AJAX_CALL_ERROR, LOGIN_USER } from "../redux/types";
 
 const SignIn = (props) => {
   const navigation = useNavigation();
   const refInput = useRef();
+
+  const [ error, setError ] = useState(false);
 
   const { register, handleSubmit, setValue, errors } = useForm();
   useEffect(() => {
@@ -27,7 +29,13 @@ const SignIn = (props) => {
 
   handleSignIn = (data) => {
     const { actions } = props;
-    actions.loginUser(data);
+    return actions.loginUser(data).then(response => {
+      if (response.type == LOGIN_USER) {
+        actions.getUser(response.payload.data.token);
+      } else if (response.type == AJAX_CALL_ERROR) {
+        setError(response.payload.message);
+      }
+    })
   };
 
   return (
@@ -35,10 +43,11 @@ const SignIn = (props) => {
       <InputScrollView
         contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
       >
-        <Image style={styles.image} source={require("../assets/car.png")} />
+        {error && <View style={styles.errorBox}><Text style={styles.errorBoxText}>{error}</Text></View>}
+        {/* <Image style={styles.image} source={require("../assets/car.png")} /> */}
         <Text style={styles.label}>Email</Text>
         <TextInput
-          style={styles.textInput}
+          style={errors.email ? styles.textInputError : styles.textInput}
           placeholder="Email"
           keyboardType="email-address"
           autoCapitalize="none"
@@ -49,9 +58,11 @@ const SignIn = (props) => {
             setValue("email", text);
           }}
         />
+        {/* {error && <Text style={styles.error}>{error.includes("exist") ? error: error[0].msg}</Text>} */}
+        {errors.email && <Text style={styles.error}>Email required</Text>}
         <Text style={styles.label}>Password</Text>
         <TextInput
-          style={styles.textInput}
+          style={errors.password ? styles.textInputError : styles.textInput}
           placeholder="Password"
           returnKeyType="done"
           secureTextEntry
@@ -61,6 +72,8 @@ const SignIn = (props) => {
             setValue("password", text);
           }}
         />
+        {/* {error && <Text style={styles.error}>{error.includes("password") && error}</Text>} */}
+        {errors.password && <Text style={styles.error}>Password required</Text>}
         <View style={styles.button}>
           <Button
             title="Sign in"
@@ -110,6 +123,29 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
 
+  textInputError: {
+    padding: 10,
+    margin: 10,
+    fontSize: 18,
+    borderRadius: 5,
+    backgroundColor: "white",
+    borderColor: "#f5c6cb",
+    borderWidth: 1,
+  },
+
+  errorBox: {
+    padding: 10,
+    margin: 10,
+    backgroundColor: "#f8d7da",
+    borderColor: "#f5c6cb",
+    borderWidth: 1,
+    borderRadius: 5
+  },
+
+  errorBoxText: {
+    color: "#721c24",
+  },
+
   row: {
     flex: 1,
     flexDirection: "row",
@@ -119,6 +155,11 @@ const styles = StyleSheet.create({
 
   text: {
     color: "gray",
+  },
+
+  error: {
+    marginLeft: 10,
+    color: "#721c24"
   },
 
   textLink: {

@@ -85,15 +85,14 @@ router.post(
 router.post(
   "/login",
   [
-    check("email", "Please enter a valid email address").isEmail(),
-    check("password", "Please enter a valid password").isLength({ min: 6 }),
+    check("email").isEmail(),
   ],
   async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
       return res.status(400).json({
-        errors: error.array(),
+        message: "Invalid email address"
       });
     }
     const { email, password } = req.body;
@@ -102,6 +101,7 @@ router.post(
         email,
       });
       if (!user) {
+        console.log("User does not exist");
         return res.status(400).json({
           message: "User does not exist",
         });
