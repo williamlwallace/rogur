@@ -5,8 +5,8 @@ export function createRide(data) {
   return function(dispatch) {
     return api
       .createRide(data)
-        .then(response => dispatch(createRideSuccess(response)))
-        .catch(error => console.log(error))
+      .then(response => dispatch(createRideSuccess(response)))
+      .catch(error => console.log(error))
   }
 }
 

@@ -8,9 +8,10 @@ import {
   Text,
   View,
   TextInput,
-  Button,
   Image,
 } from "react-native";
+import { Button } from 'galio-framework';
+import { Keyboard } from 'react-native';
 import InputScrollView from "react-native-input-scroll-view";
 import * as UserActions from "../redux/actions/user";
 import { AJAX_CALL_ERROR, LOGIN_USER } from "../redux/types";
@@ -20,6 +21,7 @@ const SignIn = (props) => {
   const refInput = useRef();
 
   const [ error, setError ] = useState(false);
+  const [ isSigningIn, setIsSigningIn ] = useState(false);
 
   const { register, handleSubmit, setValue, errors } = useForm();
   useEffect(() => {
@@ -28,11 +30,15 @@ const SignIn = (props) => {
   }, [register]);
 
   handleSignIn = (data) => {
+    Keyboard.dismiss();
+    setIsSigningIn(true);
     const { actions } = props;
     return actions.loginUser(data).then(response => {
       if (response.type == LOGIN_USER) {
+        setIsSigningIn(false);
         actions.getUser(response.payload.data.token);
       } else if (response.type == AJAX_CALL_ERROR) {
+        setIsSigningIn(false);
         setError(response.payload.message);
       }
     })
@@ -41,9 +47,10 @@ const SignIn = (props) => {
   return (
     <View style={styles.view}>
       <InputScrollView
+        keyboardShouldPersistTaps={true}
         contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
       >
-        {error && <View style={styles.errorBox}><Text style={styles.errorBoxText}>{error}</Text></View>}
+        {error && !isSigningIn && <View style={styles.errorBox}><Text style={styles.errorBoxText}>{error}</Text></View>}
         {/* <Image style={styles.image} source={require("../assets/car.png")} /> */}
         <Text style={styles.label}>Email</Text>
         <TextInput
@@ -58,7 +65,6 @@ const SignIn = (props) => {
             setValue("email", text);
           }}
         />
-        {/* {error && <Text style={styles.error}>{error.includes("exist") ? error: error[0].msg}</Text>} */}
         {errors.email && <Text style={styles.error}>Email required</Text>}
         <Text style={styles.label}>Password</Text>
         <TextInput
@@ -72,14 +78,14 @@ const SignIn = (props) => {
             setValue("password", text);
           }}
         />
-        {/* {error && <Text style={styles.error}>{error.includes("password") && error}</Text>} */}
         {errors.password && <Text style={styles.error}>Password required</Text>}
         <View style={styles.button}>
           <Button
-            title="Sign in"
             color="#3da69b"
+            uppercase={true}
+            loading={isSigningIn}
             onPress={handleSubmit(handleSignIn)}
-          />
+          >Sign in</Button>
         </View>
         <View style={styles.row}>
           <Text style={styles.text}>Don't have an account? </Text>
@@ -129,7 +135,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     borderRadius: 5,
     backgroundColor: "white",
-    borderColor: "#f5c6cb",
+    borderColor: "red",
     borderWidth: 1,
   },
 
@@ -159,7 +165,7 @@ const styles = StyleSheet.create({
 
   error: {
     marginLeft: 10,
-    color: "#721c24"
+    color: "red"
   },
 
   textLink: {
@@ -167,6 +173,8 @@ const styles = StyleSheet.create({
   },
 
   button: {
+    flex: 1,
+    alignSelf: "center",
     margin: 10,
   },
 });

@@ -6,11 +6,11 @@ import {
   Text,
   View,
   TextInput,
-  Button,
   Keyboard,
   TouchableWithoutFeedback,
   ActivityIndicator
 } from "react-native";
+import { Button, Toast } from 'galio-framework';
 import { StatusBar } from "expo-status-bar";
 import * as Location from "expo-location";
 import Geocoder from "react-native-geocoding";
@@ -18,6 +18,7 @@ import Searchbar from "../components/Searchbar";
 import Map from "../components/Map";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import * as RideActions from "../redux/actions/ride";
+import { CREATE_RIDE, AJAX_CALL_ERROR } from "../redux/types";
 
 const Home = (props) => {
   const [location, setLocation] = useState(null);
@@ -54,8 +55,11 @@ const Home = (props) => {
   }, [destination]);
 
   const [rideMetrics, setRideMetrics] = useState(null);
+  const [isRequesting, setIsRequesting] = useState(false);
+  const [isShow, setIsShow] = useState(false);
 
   handleRequestRide = () => {
+    setIsRequesting(true);
     const { actions, user } = props;
     const values = {
       origin: {
@@ -65,7 +69,15 @@ const Home = (props) => {
       destination: destination,
       userId: user.user._id,
     };
-    actions.createRide(values);
+    return actions.createRide(values).then(response => {
+      console.log(response);
+      setIsRequesting(false);
+      if (response.type == CREATE_RIDE) {
+        setIsShow(true);
+      } else if (response.type == AJAX_CALL_ERROR) {
+        setIsShow(true);
+      }
+    });
   };
 
   return (
@@ -92,14 +104,16 @@ const Home = (props) => {
                 </Text>
                 <View style={styles.button}>
                   <Button
-                    title="Request ride"
-                    color="#3da69b"
+                    color="#44c4a1"
                     onPress={() => handleRequestRide()}
-                  />
+                    shadowless={true}
+                    loading={isRequesting}
+                  >REQUEST RIDE</Button>
                 </View>
                 
               </View>
             ) : null}
+            <Toast isShow={isShow} positionIndicator="center" color="success">This is a center positioned toast</Toast>
           </>
         ) : (
           <ActivityIndicator />
@@ -138,7 +152,9 @@ const styles = StyleSheet.create({
   },
 
   button: {
+    flex: 1,
     margin: 5,
+    alignSelf: 'center',
   },
 });
 
