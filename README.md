@@ -1,4 +1,10 @@
-# rogur
-### Clone of uber
+# rogur - Uber clone
 
-rogur is a clone of uber created in React-native with Redux. The backend server is run using Express.js and MongoDB as the database
+rogur is a clone of the Uber app created in React Native, Redux with a MERN stack.
+
+### Tech Stack
+
+* React Native
+* Redux
+* Express.js
+* MongoDB
