@@ -1,16 +1,18 @@
 import axios from "axios";
 
+const API = "https://rogur.herokuapp.com"
+
 // USER
 export function createUser(data) {
-  return axios.post("https://rogur.herokuapp.com/user/signup", data);
+  return axios.post(`${API}/user/signup`, data);
 }
 
 export function loginUser(data) {
-  return axios.post("https://rogur.herokuapp.com/user/login", data);
+  return axios.post(`${API}/user/login`, data);
 }
 
 export function getUser(data) {
-  return axios.get("https://rogur.herokuapp.com/user", {
+  return axios.get(`${API}/user`, {
     headers: {
       token: data,
     },
@@ -18,10 +20,10 @@ export function getUser(data) {
 }
 
 export function updateUser(data) {
-  return axios.put("https://rogur.herokuapp.com/user", data)
+  return axios.put(`${API}/user`, data)
 }
 
 // RIDES
 export function createRide(data) {
-  return axios.post("https://rogur.herokuapp.com/ride/create", data);
+  return axios.post(`${API}/ride/create`, data);
 }
