@@ -5,8 +5,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject",
-    "server": "nodemon ./backend/index.js"
+    "eject": "expo eject"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
