@@ -2,15 +2,15 @@ import axios from "axios";
 
 // USER
 export function createUser(data) {
-  return axios.post("http://" + process.env.LOCAL_IP + ":3000/user/signup", data);
+  return axios.post("https://rogur.herokuapp.com/user/signup", data);
 }
 
 export function loginUser(data) {
-  return axios.post("http://" + process.env.LOCAL_IP + ":3000/user/login", data);
+  return axios.post("https://rogur.herokuapp.com/user/login", data);
 }
 
 export function getUser(data) {
-  return axios.get("http://" + process.env.LOCAL_IP + ":3000/user", {
+  return axios.get("https://rogur.herokuapp.com/user", {
     headers: {
       token: data,
     },
@@ -18,10 +18,10 @@ export function getUser(data) {
 }
 
 export function updateUser(data) {
-  return axios.put("http://" + process.env.LOCAL_IP + ":3000/user", data)
+  return axios.put("https://rogur.herokuapp.com/user", data)
 }
 
 // RIDES
 export function createRide(data) {
-  return axios.post("http://" + process.env.LOCAL_IP + ":3000/ride/create", data);
+  return axios.post("https://rogur.herokuapp.com/ride/create", data);
 }

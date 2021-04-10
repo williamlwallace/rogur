@@ -13,7 +13,7 @@ import Profile from "../screens/Profile";
 //auth stack, if user is not authenticated
 const authStack = createStackNavigator();
 
-//main drawer, if user is authenticated
+//main stack, if user is authenticated
 const mainStack = createStackNavigator();
 
 const Routes = (props) => {
